@@ -14,12 +14,12 @@ enum EWorkState {
   free_day = 'free_day',
 }
 
-const DaysDiffWorkState = new Map([
-  [0, EWorkState.working_in_day],
-  [1, EWorkState.working_in_night],
-  [2, EWorkState.not_working_after_night],
-  [3, EWorkState.free_day],
-]);
+const daysDiffWorkState = [
+  EWorkState.working_in_day,
+  EWorkState.working_in_night,
+  EWorkState.not_working_after_night,
+  EWorkState.free_day,
+];
 
 const WorkStateLabel: Record<EWorkState, string> = {
   [EWorkState.working_in_day]: 'Работает в день',
@@ -46,8 +46,8 @@ const getWorkStateFromDate = (date: Date, firstDayOfWorkDate: Date): EWorkState 
 
   const state =
     fixedDate.getTime() >= firstDayOfWorkDate.getTime()
-      ? DaysDiffWorkState.get(diffInDays % DaysDiffWorkState.size)
-      : DaysDiffWorkState.get(DaysDiffWorkState.size - (diffInDays % DaysDiffWorkState.size));
+      ? daysDiffWorkState[diffInDays % daysDiffWorkState.length]
+      : daysDiffWorkState[daysDiffWorkState.length - 1 - ((diffInDays - 1) % daysDiffWorkState.length)];
 
   if (!state) throw new Error('State not found');
   return state;
