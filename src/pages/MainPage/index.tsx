@@ -128,20 +128,23 @@ export const MainPage: FC = () => {
         <Dialog open={isSettingsDialogOpen} onClose={() => setIsSettingsDialogOpen(false)}>
           <DialogTitle>Настройки</DialogTitle>
           <DialogContent sx={{ paddingTop: (t) => `${t.spacing(2)} !important` }}>
-            <DatePicker
-              label="Первый день работы (в день)"
-              value={firstDayOfWorkDate}
-              onChange={(newValue) => {
-                if (newValue) {
-                  const newDateString = newValue.toISOString();
-                  setFirstDayOfWork(newDateString);
-                  localStorage.setItem(ELocalStorageKey.FirstDayOfWork, newDateString);
-                } else {
-                  setFirstDayOfWork(null);
-                  localStorage.removeItem(ELocalStorageKey.FirstDayOfWork);
-                }
-              }}
-            />
+            <Stack direction="column" gap={2}>
+              <Typography variant="body1">Когда последний раз работал в день (сегодня или ранее)?</Typography>
+              <DatePicker
+                label="Последний день работы в день"
+                value={firstDayOfWorkDate}
+                onChange={(newValue) => {
+                  if (newValue) {
+                    const newDateString = newValue.toISOString();
+                    setFirstDayOfWork(newDateString);
+                    localStorage.setItem(ELocalStorageKey.FirstDayOfWork, newDateString);
+                  } else {
+                    setFirstDayOfWork(null);
+                    localStorage.removeItem(ELocalStorageKey.FirstDayOfWork);
+                  }
+                }}
+              />
+            </Stack>
           </DialogContent>
         </Dialog>
       </PageMain>
