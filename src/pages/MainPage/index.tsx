@@ -52,7 +52,7 @@ const getWorkStateFromDate = (date: Date, firstDayOfWorkDate: Date): EWorkState 
 export const MainPage: FC = () => {
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const [firstDayOfWork, setFirstDayOfWork] = useState(localStorage.getItem(ELocalStorageKey.FirstDayOfWork));
-  const firstDayOfWorkDate = firstDayOfWork ? new Date(firstDayOfWork) : new Date();
+  const firstDayOfWorkDate = firstDayOfWork ? new Date(firstDayOfWork) : null;
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -61,51 +61,58 @@ export const MainPage: FC = () => {
       <PageMain>
         <Stack direction="column" gap={2}>
           <Typography variant="h3">Работает ли папа ... ?</Typography>
-          <Typography variant="body1" alignItems="center">
-            Сегодня:{' '}
-            <Typography
-              component="span"
-              sx={{ color: WorkStateColor[getWorkStateFromDate(new Date(), firstDayOfWorkDate)] }}
-            >
-              {WorkStateLabel[getWorkStateFromDate(new Date(), firstDayOfWorkDate)]}
-            </Typography>
-          </Typography>
-          <Typography variant="body1">
-            Завтра:{' '}
-            <Typography
-              component="span"
-              sx={{ color: WorkStateColor[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS), firstDayOfWorkDate)] }}
-            >
-              {WorkStateLabel[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS), firstDayOfWorkDate)]}
-            </Typography>
-          </Typography>
-          <Typography variant="body1">
-            Послезавтра:{' '}
-            <Typography
-              component="span"
-              sx={{
-                color: WorkStateColor[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS * 2), firstDayOfWorkDate)],
-              }}
-            >
-              {WorkStateLabel[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS * 2), firstDayOfWorkDate)]}
-            </Typography>
-          </Typography>
-          <Typography variant="body1">В выбранный день:</Typography>
-          <DatePicker
-            value={selectedDate}
-            onChange={(newValue) => {
-              setSelectedDate(newValue);
-            }}
-          />
-          {selectedDate && (
-            <Typography
-              component="span"
-              sx={{
-                color: WorkStateColor[getWorkStateFromDate(new Date(selectedDate), firstDayOfWorkDate)],
-              }}
-            >
-              {WorkStateLabel[getWorkStateFromDate(new Date(selectedDate), firstDayOfWorkDate)]}
-            </Typography>
+          {firstDayOfWorkDate && (
+            <Stack direction="column" gap={2}>
+              <Typography variant="body1" alignItems="center">
+                Сегодня:{' '}
+                <Typography
+                  component="span"
+                  sx={{ color: WorkStateColor[getWorkStateFromDate(new Date(), firstDayOfWorkDate)] }}
+                >
+                  {WorkStateLabel[getWorkStateFromDate(new Date(), firstDayOfWorkDate)]}
+                </Typography>
+              </Typography>
+              <Typography variant="body1">
+                Завтра:{' '}
+                <Typography
+                  component="span"
+                  sx={{
+                    color: WorkStateColor[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS), firstDayOfWorkDate)],
+                  }}
+                >
+                  {WorkStateLabel[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS), firstDayOfWorkDate)]}
+                </Typography>
+              </Typography>
+              <Typography variant="body1">
+                Послезавтра:{' '}
+                <Typography
+                  component="span"
+                  sx={{
+                    color:
+                      WorkStateColor[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS * 2), firstDayOfWorkDate)],
+                  }}
+                >
+                  {WorkStateLabel[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS * 2), firstDayOfWorkDate)]}
+                </Typography>
+              </Typography>
+              <Typography variant="body1">В выбранный день:</Typography>
+              <DatePicker
+                value={selectedDate}
+                onChange={(newValue) => {
+                  setSelectedDate(newValue);
+                }}
+              />
+              {selectedDate && (
+                <Typography
+                  component="span"
+                  sx={{
+                    color: WorkStateColor[getWorkStateFromDate(new Date(selectedDate), firstDayOfWorkDate)],
+                  }}
+                >
+                  {WorkStateLabel[getWorkStateFromDate(new Date(selectedDate), firstDayOfWorkDate)]}
+                </Typography>
+              )}
+            </Stack>
           )}
         </Stack>
 
