@@ -2,7 +2,7 @@ import { PageMain } from '@app/components/PageMain';
 import { ELocalStorageKey } from '@app/core/localStorage/constants';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Stack, Typography } from '@mui/material';
-import { DatePicker, LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider, PickersDay, StaticDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale/ru';
 import { FC, useState } from 'react';
@@ -53,6 +53,23 @@ const getWorkStateFromDate = (date: Date, firstDayOfWorkDate: Date): EWorkState 
   return state;
 };
 
+const StaticPickerDay = (
+  props: Parameters<typeof PickersDay>[0] & { firstDayOfWorkDate: Date }
+): ReturnType<typeof PickersDay> => {
+  const { firstDayOfWorkDate } = props;
+  return (
+    <PickersDay
+      {...props}
+      sx={{
+        ...props.sx,
+        borderColor: WorkStateColor[getWorkStateFromDate(new Date(props.day), firstDayOfWorkDate)],
+        borderWidth: 1,
+        borderStyle: 'solid',
+      }}
+    />
+  );
+};
+
 export const MainPage: FC = () => {
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const [firstDayOfWork, setFirstDayOfWork] = useState(localStorage.getItem(ELocalStorageKey.FirstDayOfWork));
@@ -101,7 +118,10 @@ export const MainPage: FC = () => {
               </Typography>
               <Typography variant="body1">В выбранный день:</Typography>
               <StaticDatePicker
-                slots={{ actionBar: () => <span /> }}
+                slots={{
+                  actionBar: () => <span />,
+                  day: (props) => <StaticPickerDay {...props} firstDayOfWorkDate={firstDayOfWorkDate} />,
+                }}
                 value={selectedDate}
                 onChange={(newValue) => {
                   setSelectedDate(newValue);
