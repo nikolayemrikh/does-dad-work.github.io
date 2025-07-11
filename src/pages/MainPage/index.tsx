@@ -108,6 +108,7 @@ export const MainPage: FC = () => {
             </Typography>
           )}
         </Stack>
+
         <Fab
           size="small"
           color="secondary"
