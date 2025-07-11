@@ -2,7 +2,7 @@ import { PageMain } from '@app/components/PageMain';
 import { ELocalStorageKey } from '@app/core/localStorage/constants';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, DialogContent, DialogTitle, Fab, Stack, Typography } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale/ru';
 import { FC, useState } from 'react';
@@ -96,7 +96,8 @@ export const MainPage: FC = () => {
                 </Typography>
               </Typography>
               <Typography variant="body1">В выбранный день:</Typography>
-              <DatePicker
+              <StaticDatePicker
+                slots={{ actionBar: () => <span /> }}
                 value={selectedDate}
                 onChange={(newValue) => {
                   setSelectedDate(newValue);
