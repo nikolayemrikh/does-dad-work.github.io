@@ -42,9 +42,12 @@ const getWorkStateFromDate = (date: Date, firstDayOfWorkDate: Date): EWorkState 
   fixedDate.setHours(0, 0, 0, 0);
   const fixedFirstDayOfWorkDate = new Date(date);
   fixedFirstDayOfWorkDate.setHours(0, 0, 0, 0);
-  const diffInDays = (fixedDate.getTime() - firstDayOfWorkDate.getTime()) / DAY_IN_MS;
+  const diffInDays = Math.abs(fixedDate.getTime() - firstDayOfWorkDate.getTime()) / DAY_IN_MS;
 
-  const state = DaysDiffWorkState.get(diffInDays % DaysDiffWorkState.size);
+  const state =
+    fixedDate.getTime() >= firstDayOfWorkDate.getTime()
+      ? DaysDiffWorkState.get(diffInDays % DaysDiffWorkState.size)
+      : DaysDiffWorkState.get(DaysDiffWorkState.size - (diffInDays % DaysDiffWorkState.size));
   if (!state) throw new Error('State not found');
   return state;
 };
@@ -63,7 +66,7 @@ export const MainPage: FC = () => {
           <Typography variant="h3">Работает ли папа ... ?</Typography>
           {firstDayOfWorkDate && (
             <Stack direction="column" gap={2}>
-              <Typography variant="body1" alignItems="center">
+              {/* <Typography variant="body1" alignItems="center">
                 Сегодня:{' '}
                 <Typography
                   component="span"
@@ -94,7 +97,7 @@ export const MainPage: FC = () => {
                 >
                   {WorkStateLabel[getWorkStateFromDate(new Date(Date.now() + DAY_IN_MS * 2), firstDayOfWorkDate)]}
                 </Typography>
-              </Typography>
+              </Typography> */}
               <Typography variant="body1">В выбранный день:</Typography>
               <StaticDatePicker
                 slots={{ actionBar: () => <span /> }}
@@ -135,7 +138,6 @@ export const MainPage: FC = () => {
               <DatePicker
                 label="Последний день работы в день"
                 value={firstDayOfWorkDate}
-                disableFuture
                 onChange={(newValue) => {
                   if (newValue) {
                     const newDateString = newValue.toISOString();
