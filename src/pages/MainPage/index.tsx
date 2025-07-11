@@ -1,7 +1,7 @@
 import { PageMain } from '@app/components/PageMain';
 import { ELocalStorageKey } from '@app/core/localStorage/constants';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Dialog, DialogContent, DialogTitle, Fab, Stack, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Stack, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { ru } from 'date-fns/locale/ru';
@@ -48,6 +48,7 @@ const getWorkStateFromDate = (date: Date, firstDayOfWorkDate: Date): EWorkState 
     fixedDate.getTime() >= firstDayOfWorkDate.getTime()
       ? DaysDiffWorkState.get(diffInDays % DaysDiffWorkState.size)
       : DaysDiffWorkState.get(DaysDiffWorkState.size - (diffInDays % DaysDiffWorkState.size));
+
   if (!state) throw new Error('State not found');
   return state;
 };
@@ -137,8 +138,11 @@ export const MainPage: FC = () => {
               <Typography variant="body1">Когда последний раз работал в день (сегодня или ранее)?</Typography>
               <DatePicker
                 label="Последний день работы в день"
-                value={firstDayOfWorkDate}
-                onChange={(newValue) => {
+                defaultValue={firstDayOfWorkDate}
+                minDate={new Date('2000-01-01')}
+                onAccept={(newValue, context) => {
+                  if (context.validationError) return;
+
                   if (newValue) {
                     const newDateString = newValue.toISOString();
                     setFirstDayOfWork(newDateString);
@@ -151,6 +155,11 @@ export const MainPage: FC = () => {
               />
             </Stack>
           </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="primary" onClick={() => setIsSettingsDialogOpen(false)}>
+              Готово
+            </Button>
+          </DialogActions>
         </Dialog>
       </PageMain>
     </LocalizationProvider>
