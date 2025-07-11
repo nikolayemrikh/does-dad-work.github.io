@@ -135,6 +135,7 @@ export const MainPage: FC = () => {
               <DatePicker
                 label="Последний день работы в день"
                 value={firstDayOfWorkDate}
+                disableFuture
                 onChange={(newValue) => {
                   if (newValue) {
                     const newDateString = newValue.toISOString();
