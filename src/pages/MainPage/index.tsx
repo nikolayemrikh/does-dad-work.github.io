@@ -103,7 +103,6 @@ export const MainPage: FC = () => {
               <StaticDatePicker
                 slots={{ actionBar: () => <span /> }}
                 value={selectedDate}
-                disablePast
                 onChange={(newValue) => {
                   setSelectedDate(newValue);
                 }}
