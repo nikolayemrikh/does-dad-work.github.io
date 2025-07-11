@@ -56,12 +56,12 @@ const getWorkStateFromDate = (date: Date, firstDayOfWorkDate: Date): EWorkState 
 const StaticPickerDay = (
   props: Parameters<typeof PickersDay>[0] & { firstDayOfWorkDate: Date }
 ): ReturnType<typeof PickersDay> => {
-  const { firstDayOfWorkDate } = props;
+  const { firstDayOfWorkDate, ...restProps } = props;
   return (
     <PickersDay
-      {...props}
+      {...restProps}
       sx={{
-        ...props.sx,
+        ...restProps.sx,
         borderColor: WorkStateColor[getWorkStateFromDate(new Date(props.day), firstDayOfWorkDate)],
         borderWidth: 1,
         borderStyle: 'solid',
